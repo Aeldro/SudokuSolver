@@ -219,6 +219,30 @@ namespace SudokuSolver
                 return false;
             }
 
+            static bool isNumberInDoubleInThe3x3(int rowIndex, int columnIndex, string[,] sudokuArray)
+            {
+                int squareRow = (rowIndex / 3) * 3;
+                int squareColumn = (columnIndex / 3) * 3;
+
+                for (int i = squareRow; i < squareRow + 3; i++)
+                {
+                    for (int j = squareColumn; j < squareColumn + 3; j++)
+                    {
+                        for (int k = squareRow; k < squareRow + 3; k++)
+                        {
+                            for (int l = squareColumn; l < squareColumn + 3; l++)
+                            {
+                                if ((i != k || j != l) && sudokuArray[i, j] != "." && sudokuArray[i, j] == sudokuArray[k, l])
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+
             // Main fucntion
             //static string[,] sudokuSolver(string[,] input)
             //{
@@ -253,7 +277,7 @@ namespace SudokuSolver
                                     { ".", "6", ".", ".", ".", ".", "2", "8", "." },
                                     { ".", ".", ".", "4", "1", "9", ".", ".", "5" },
                                     { ".", ".", ".", ".", "8", ".", ".", "7", "9" } };
-            Console.WriteLine(isNumberInDoubleInTheRow(0, sudoku1));
+            Console.WriteLine(isNumberInDoubleInThe3x3(0, 1, sudoku1));
         }
     }
 }
