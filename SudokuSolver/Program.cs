@@ -128,10 +128,6 @@ namespace SudokuSolver
                         }
                     }
                 }
-                foreach (EmptyCase emptyCase in emptyCasesList)
-                {
-                    emptyCase.logAllInfos();
-                }
                 return emptyCasesList;
             }
 
@@ -179,7 +175,7 @@ namespace SudokuSolver
 
             static bool isNumberExistsInTheRowColumn3x3(int[] coordinates, string value, string[,] sudokuArray)
             {
-                if (isNumberExistsInTheRow(coordinates, value, sudokuArray) && isNumberExistsInTheColumn(coordinates, value, sudokuArray) && isNumberExistsInThe3x3(coordinates, value, sudokuArray))
+                if (isNumberExistsInTheRow(coordinates, value, sudokuArray) || isNumberExistsInTheColumn(coordinates, value, sudokuArray) || isNumberExistsInThe3x3(coordinates, value, sudokuArray))
                 {
                     return true;
                 }
@@ -243,6 +239,19 @@ namespace SudokuSolver
                 return false;
             }
 
+            static bool isNumberInDoubleInTheRowColumn3x3(int rowIndex, int columnIndex, string[,] sudokuArray)
+            {
+                if (isNumberInDoubleInTheRow(rowIndex, sudokuArray) || isNumberInDoubleInTheColumn(columnIndex, sudokuArray) || isNumberInDoubleInThe3x3(rowIndex, columnIndex, sudokuArray))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
             // Main fucntion
             //static string[,] sudokuSolver(string[,] input)
             //{
@@ -277,7 +286,7 @@ namespace SudokuSolver
                                     { ".", "6", ".", ".", ".", ".", "2", "8", "." },
                                     { ".", ".", ".", "4", "1", "9", ".", ".", "5" },
                                     { ".", ".", ".", ".", "8", ".", ".", "7", "9" } };
-            Console.WriteLine(isNumberInDoubleInThe3x3(0, 1, sudoku1));
+            Console.WriteLine(isNumberInDoubleInTheRowColumn3x3(7, 5, sudoku1));
         }
     }
 }
