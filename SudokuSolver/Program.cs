@@ -251,30 +251,115 @@ namespace SudokuSolver
                 }
             }
 
+            static bool isThereADoubleInTheArray(string[,] sudokuArray)
+            {
+                for (int i = 0; i < sudokuArray.GetLength(0); i++)
+                {
+                    for (int j = 0; j < sudokuArray.GetLength(1); j++)
+                    {
+                        if (isNumberInDoubleInTheRowColumn3x3(i, j, sudokuArray))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            static bool isThereAnEmptyCaseInTheArray(string[,] sudokuArray)
+            {
+                for (int i = 0; i < sudokuArray.GetLength(0); i++)
+                {
+                    for (int j = 0; j < sudokuArray.GetLength(1); j++)
+                    {
+                        if (sudokuArray[i, j] == ".")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // Comble chaque case vide avec le premier nombre possible
+            static void initEmptyCases(List<EmptyCase> emptyCasesList, string[,] sudokuArray)
+            {
+                for (int i = 0; i < emptyCasesList.Count; i++)
+                {
+                    sudokuArray[emptyCasesList[i].getCoordinates()[0], emptyCasesList[i].getCoordinates()[1]] = emptyCasesList[i].getPossibleNumbers()[0];
+                    emptyCasesList[i].setIt(emptyCasesList[i].getIt() + 1);
+                }
+            }
+
 
             // Main fucntion
-            //static string[,] sudokuSolver(string[,] input)
-            //{
+            static string[,] sudokuSolver(string[,] input)
+            {
 
-            //    if (inputValidation(input))
-            //    {
-            //        string[,] sudokuArray = input;
-            //        List<EmptyCase> emptyCasesList = emptyCasesListDefiner(sudokuArray);
+                if (inputValidation(input))
+                {
+                    string[,] sudokuArray = input;
+                    List<EmptyCase> emptyCasesList = emptyCasesListDefiner(sudokuArray);
 
-            //        for (int i = 0; i < emptyCasesList.Count; i++)
-            //        {
-            //            if ()
-            //            {
+                    int iteration = 0;
 
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Le tableau doit avoir une taille de 9x9 et contenir uniquement des chiffres de 1 à 9 ou des . pour les cases vides.");
-            //        return null;
-            //    }
-            //}
+                    for (int i = 0; i < emptyCasesList.Count; i++)
+                    {
+
+                        foreach (string possibleNumber in emptyCasesList[i].getPossibleNumbers())
+                        {
+
+                            //if (emptyCasesList.Last() == emptyCase && emptyCase.getPossibleNumbers().Last() == possibleNumber)
+                            //{
+                            //    Console.WriteLine("Aucune solution possible pour cette grille.");
+                            //    return null;
+                            //}
+
+                            if (isNumberInDoubleInTheRowColumn3x3(emptyCasesList[i].getCoordinates()[0], emptyCasesList[i].getCoordinates()[1], sudokuArray) || sudokuArray[emptyCasesList[i].getCoordinates()[0], emptyCasesList[i].getCoordinates()[1]] == ".")
+                            {
+                                sudokuArray[emptyCasesList[i].getCoordinates()[0], emptyCasesList[i].getCoordinates()[1]] = possibleNumber;
+                                if (possibleNumber == emptyCasesList[i].getPossibleNumbers().Last())
+                                {
+                                    i = i - 1;
+                                }
+
+                                //if (!isNumberInDoubleInTheRowColumn3x3(emptyCasesList[i].getCoordinates()[0], emptyCasesList[i].getCoordinates()[1], sudokuArray))
+                                //{
+                                //    break;
+                                //}
+                            }
+
+                            iteration = iteration + 1;
+                            Console.WriteLine(iteration);
+                        }
+
+
+                    }
+
+                    Console.WriteLine("Solution trouvée !");
+                    for (int i = 0; i < sudokuArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < sudokuArray.GetLength(1); j++)
+                        {
+                            if (j == sudokuArray.GetLength(1) - 1)
+                            {
+                                Console.WriteLine(sudokuArray[i, j]);
+                            }
+                            else
+                            {
+                                Console.Write(sudokuArray[i, j]);
+
+                            }
+                        }
+                    }
+                    return sudokuArray;
+                }
+                else
+                {
+                    Console.WriteLine("Le tableau doit avoir une taille de 9x9 et contenir uniquement des chiffres de 1 à 9 ou des . pour les cases vides.");
+                    return null;
+                }
+            }
 
 
             string[,] sudoku1 = {   { "5", "3", ".", ".", "7", ".", ".", ".", "." },
@@ -286,7 +371,7 @@ namespace SudokuSolver
                                     { ".", "6", ".", ".", ".", ".", "2", "8", "." },
                                     { ".", ".", ".", "4", "1", "9", ".", ".", "5" },
                                     { ".", ".", ".", ".", "8", ".", ".", "7", "9" } };
-            Console.WriteLine(isNumberInDoubleInTheRowColumn3x3(7, 5, sudoku1));
+            Console.WriteLine(sudokuSolver(sudoku1));
         }
     }
 }
